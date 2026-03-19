@@ -1,12 +1,57 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My GitHub Website</title>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <title>Important Question 😄</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      margin-top: 100px;
+    }
+
+    #noBtn {
+      position: absolute;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello, GitHub!</h1>
-  <p>This is my website hosted on GitHub Pages.</p>
+
+  <h1>Will you be my girlfriend? ❤️</h1>
+
+  <button onclick="sayYes()">Yes 😍</button>
+  <button id="noBtn">No 😢</button>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+
+    // Move button when mouse gets close
+    document.addEventListener("mousemove", (e) => {
+      const rect = noBtn.getBoundingClientRect();
+
+      const distanceX = Math.abs(e.clientX - rect.left);
+      const distanceY = Math.abs(e.clientY - rect.top);
+
+      // If cursor is close → move button
+      if (distanceX < 100 && distanceY < 50) {
+        const newX = Math.random() * window.innerWidth;
+        const newY = Math.random() * window.innerHeight;
+
+        noBtn.style.left = newX + "px";
+        noBtn.style.top = newY + "px";
+      }
+    });
+
+    function sayYes() {
+      alert("Yay!!! ❤️🥰");
+    }
+  </script>
+
 </body>
 </html>
