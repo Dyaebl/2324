@@ -1,57 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Important Question 😄</title>
-  <style>
-    body {
-      text-align: center;
-      font-family: Arial;
-      margin-top: 100px;
-    }
+<meta charset="UTF-8">
+<title>Important Question ❤️</title>
 
-    #noBtn {
-      position: absolute;
-    }
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    overflow: hidden;
+  }
 
-    button {
-      padding: 10px 20px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-  </style>
+  .card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  button {
+    padding: 12px 25px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  #yesBtn {
+    background: #ff4d6d;
+    color: white;
+  }
+
+  #yesBtn:hover {
+    transform: scale(1.1);
+  }
+
+  #noBtn {
+    background: #ccc;
+    position: absolute;
+    transition: left 0.2s ease, top 0.2s ease;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .result {
+    font-size: 28px;
+    color: white;
+    text-align: center;
+  }
+</style>
 </head>
+
 <body>
 
+<div class="card" id="card">
   <h1>Will you be my girlfriend? ❤️</h1>
-
-  <button onclick="sayYes()">Yes 😍</button>
+  <button id="yesBtn" onclick="sayYes()">Yes 😍</button>
   <button id="noBtn">No 😢</button>
+</div>
 
-  <script>
-    const noBtn = document.getElementById("noBtn");
+<div class="result hidden" id="result">
+  🎉 YAY!!! You made my day ❤️🥰
+</div>
 
-    // Move button when mouse gets close
-    document.addEventListener("mousemove", (e) => {
-      const rect = noBtn.getBoundingClientRect();
+<script>
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
 
-      const distanceX = Math.abs(e.clientX - rect.left);
-      const distanceY = Math.abs(e.clientY - rect.top);
+  let scale = 1;
 
-      // If cursor is close → move button
-      if (distanceX < 100 && distanceY < 50) {
-        const newX = Math.random() * window.innerWidth;
-        const newY = Math.random() * window.innerHeight;
+  document.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
 
-        noBtn.style.left = newX + "px";
-        noBtn.style.top = newY + "px";
-      }
-    });
+    const dx = e.clientX - rect.left;
+    const dy = e.clientY - rect.top;
 
-    function sayYes() {
-      alert("Yay!!! ❤️🥰");
+    const distance = Math.sqrt(dx*dx + dy*dy);
+
+    if (distance < 120) {
+      const newX = Math.random() * (window.innerWidth - 100);
+      const newY = Math.random() * (window.innerHeight - 50);
+
+      noBtn.style.left = newX + "px";
+      noBtn.style.top = newY + "px";
+
+      // Grow YES button each escape
+      scale += 0.1;
+      yesBtn.style.transform = `scale(${scale})`;
     }
-  </script>
+  });
+
+  function sayYes() {
+    document.getElementById("card").classList.add("hidden");
+    document.getElementById("result").classList.remove("hidden");
+    launchConfetti();
+  }
+
+  // 🎉 Simple Confetti
+  function launchConfetti() {
+    for (let i = 0; i < 100; i++) {
+      let confetti = document.createElement("div");
+      confetti.style.position = "fixed";
+      confetti.style.width = "10px";
+      confetti.style.height = "10px";
+      confetti.style.background = `hsl(${Math.random()*360}, 100%, 50%)`;
+      confetti.style.left = Math.random() * window.innerWidth + "px";
+      confetti.style.top = "-10px";
+      confetti.style.opacity = 0.7;
+
+      document.body.appendChild(confetti);
+
+      let fall = Math.random() * 3 + 2;
+
+      confetti.animate([
+        { transform: "translateY(0px)" },
+        { transform: `translateY(${window.innerHeight}px)` }
+      ], {
+        duration: fall * 1000,
+        easing: "linear"
+      });
+
+      setTimeout(() => confetti.remove(), 4000);
+    }
+  }
+</script>
 
 </body>
 </html>
