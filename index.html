@@ -37,17 +37,9 @@
     transition: 0.3s;
   }
 
-  .buttons {
-  display: flex;
-  justify-content: center;
-  gap: 30px; /* controls space between buttons */
-  margin-top: 20px;
-  }
-
   #yesBtn {
     background: #ff4d6d;
     color: white;
-    margin-right: 10px;
   }
 
   #yesBtn:hover {
@@ -76,14 +68,12 @@
 
 <div class="card" id="card">
   <h1>Will you be my girlfriend? ❤️</h1>
-  <div class="buttons">
-    <button id="yesBtn" onclick="sayYes()">Yes 😍</button>
-    <button id="noBtn">No 😢</button>
-  </div>
+  <button id="yesBtn" onclick="sayYes()">Yes 😍</button>
+  <button id="noBtn">No 😢</button>
 </div>
 
 <div class="result hidden" id="result">
-  🎉 YAY!!! ❤️🥰
+  🎉 I knew you would pick Yes :) 🎉
 </div>
 
 <script>
