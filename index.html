@@ -186,7 +186,7 @@ function animateMemes() {
     m.y += m.dy;
 
     // rotation
-    m.rotation += m.spin;
+    m.rotation += m.spin * 0.5;
 
     // wall collision (bounce)
     if (m.x <= 0 || m.x >= window.innerWidth - 70) {
