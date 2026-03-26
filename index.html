@@ -66,11 +66,20 @@
     position: relative;
     z-index: 10;
   }
+  
+  #noArea {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;  
+  height: 100vh;  
+  pointer-events: none; 
+}
 </style>
 </head>
 
 <body>
-
+<div id="noArea"></div> <!-- invisible area for No button -->
 <div class="card" id="card">
   <h1>Will you be my girlfriend? ❤️</h1>
   <button id="yesBtn" onclick="sayYes()">Yes 😈</button>
@@ -84,7 +93,8 @@
 <script>
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
-
+  const noArea = document.getElementById("noArea");
+  
   let scale = 1;
 
   document.addEventListener("mousemove", (e) => {
@@ -94,12 +104,11 @@
   const distance = Math.sqrt(dx*dx + dy*dy);
 
   if (distance < 120) {
-    const cardRect = card.getBoundingClientRect();
-    
-    const minX = noBtn.offsetWidth/2;
-    const maxX = cardRect.width - noBtn.offsetWidth/2;
-    const minY = noBtn.offsetHeight/2;
-    const maxY = cardRect.height - noBtn.offsetHeight/2;
+    const areaRect = noArea.getBoundingClientRect();
+    const minX = areaRect.left;
+    const maxX = areaRect.right - noBtn.offsetWidth;
+    const minY = areaRect.top;
+    const maxY = areaRect.bottom - noBtn.offsetHeight;
 
     const newX = Math.random() * (maxX - minX) + minX;
     const newY = Math.random() * (maxY - minY) + minY;
@@ -120,19 +129,19 @@
     
     // Replace memes with hearts
     elements.forEach(m => {
-    const heart = document.createElement("div");
-    heart.innerText = "❤️";
-    heart.style.position = "fixed";
-    heart.style.left = m.x + "px";
-    heart.style.top = m.y + "px";
-    heart.style.fontSize = "32px";
-    heart.style.zIndex = "100";
-    heart.style.pointerEvents = "none";
-    document.body.appendChild(heart);
+      const heart = document.createElement("div");
+      heart.innerText = "❤️";
+      heart.style.position = "fixed";
+      heart.style.left = m.x + "px";
+      heart.style.top = m.y + "px";
+      heart.style.fontSize = "32px";
+      heart.style.zIndex = "100";
+      heart.style.pointerEvents = "none";
+      document.body.appendChild(heart);
 
-    // Replace element in animation array
-    m.el.remove();
-    m.el = heart;
+      // Replace element in animation array
+      m.el.remove();
+      m.el = heart;
   });
  }
   
