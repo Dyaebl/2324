@@ -206,6 +206,37 @@ function animateMemes() {
 }
 
 animateMemes();
+
+// Hearts explosion from memes
+  memes.forEach(m => {
+    const heart = document.createElement("div");
+    heart.innerText = "❤️";
+    heart.style.position = "fixed";
+    heart.style.left = m.x + "px";
+    heart.style.top = m.y + "px";
+    heart.style.fontSize = "32px";
+    heart.style.zIndex = "100";
+    heart.style.pointerEvents = "none";
+    document.body.appendChild(heart);
+
+    const angle = Math.random() * 2 * Math.PI;
+    const speed = Math.random() * 10 + 5;
+    const dx = Math.cos(angle) * speed;
+    const dy = Math.sin(angle) * speed;
+
+    let t = 0;
+    const anim = setInterval(() => {
+      t++;
+      heart.style.transform = `translate(${dx*t}px, ${dy*t}px) rotate(${t*5}deg)`;
+      heart.style.opacity = 1 - t/50;
+      if (t > 50) {
+        clearInterval(anim);
+        heart.remove();
+      }
+    }, 16);
+
+    m.el.remove();
+  });
 </script>
 
 </body>
