@@ -117,8 +117,39 @@
     document.getElementById("card").classList.add("hidden");
     document.getElementById("result").classList.remove("hidden");
     launchConfetti();
-  }
+    
+    // Hearts explosion from memes
+    memes.forEach(m => {
+    const heart = document.createElement("div");
+    heart.innerText = "❤️";
+    heart.style.position = "fixed";
+    heart.style.left = m.x + "px";
+    heart.style.top = m.y + "px";
+    heart.style.fontSize = "32px";
+    heart.style.zIndex = "100";
+    heart.style.pointerEvents = "none";
+    document.body.appendChild(heart);
 
+    const angle = Math.random() * 2 * Math.PI;
+    const speed = Math.random() * 10 + 5;
+    const dx = Math.cos(angle) * speed;
+    const dy = Math.sin(angle) * speed;
+
+    let t = 0;
+    const anim = setInterval(() => {
+      t++;
+      heart.style.transform = `translate(${dx*t}px, ${dy*t}px) rotate(${t*5}deg)`;
+      heart.style.opacity = 1 - t/50;
+      if (t > 50) {
+        clearInterval(anim);
+        heart.remove();
+      }
+    }, 16);
+
+    m.el.remove();
+  });
+ }
+  
   // 🎉 Simple Confetti
   function launchConfetti() {
     for (let i = 0; i < 100; i++) {
@@ -147,7 +178,7 @@
     }
   }
 
-  // Memes
+// Memes
 const memeImages = [
   "https://cdn.discordapp.com/attachments/1420717886904991789/1486667268099281017/image.png?ex=69c65649&is=69c504c9&hm=24bc090f9cb76d0d0baec64d485c3f1e8fda85fbef13f344efcdc36b958c44ef&",
   "https://media.discordapp.net/attachments/1420717886904991789/1486669969835032666/i-love-you.png?ex=69c658cd&is=69c5074d&hm=dbebb6f2e5d4974665dda9fb9feb9263569abf519743e830243fafb27b7b8d2b&=&format=webp&quality=lossless"
@@ -207,36 +238,6 @@ function animateMemes() {
 
 animateMemes();
 
-// Hearts explosion from memes
-  memes.forEach(m => {
-    const heart = document.createElement("div");
-    heart.innerText = "❤️";
-    heart.style.position = "fixed";
-    heart.style.left = m.x + "px";
-    heart.style.top = m.y + "px";
-    heart.style.fontSize = "32px";
-    heart.style.zIndex = "100";
-    heart.style.pointerEvents = "none";
-    document.body.appendChild(heart);
-
-    const angle = Math.random() * 2 * Math.PI;
-    const speed = Math.random() * 10 + 5;
-    const dx = Math.cos(angle) * speed;
-    const dy = Math.sin(angle) * speed;
-
-    let t = 0;
-    const anim = setInterval(() => {
-      t++;
-      heart.style.transform = `translate(${dx*t}px, ${dy*t}px) rotate(${t*5}deg)`;
-      heart.style.opacity = 1 - t/50;
-      if (t > 50) {
-        clearInterval(anim);
-        heart.remove();
-      }
-    }, 16);
-
-    m.el.remove();
-  });
 </script>
 
 </body>
