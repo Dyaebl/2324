@@ -137,6 +137,64 @@
       setTimeout(() => confetti.remove(), 4000);
     }
   }
+
+  // Memes
+const memeImages = [
+  "https://cdn.discordapp.com/attachments/1420717886904991789/1486667268099281017/image.png?ex=69c65649&is=69c504c9&hm=24bc090f9cb76d0d0baec64d485c3f1e8fda85fbef13f344efcdc36b958c44ef&",
+  "https://media.discordapp.net/attachments/1420717886904991789/1486669969835032666/i-love-you.png?ex=69c658cd&is=69c5074d&hm=dbebb6f2e5d4974665dda9fb9feb9263569abf519743e830243fafb27b7b8d2b&=&format=webp&quality=lossless"
+];
+const memes = [];
+
+function createMeme() {
+  const img = document.createElement("img");
+  img.src = memeImages[Math.floor(Math.random() * memeImages.length)];
+  img.style.position = "fixed";
+  img.style.width = "100px";
+  img.style.height = "100px";
+  img.style.pointerEvents = "none";
+  img.style.zIndex = "0";
+  img.style.willChange = "transform";
+
+  const x = Math.random() * (window.innerWidth - 100);
+  const y = Math.random() * (window.innerHeight - 100);
+  img.style.transform = `translate(${x}px, ${y}px)`;
+  document.body.appendChild(img);
+
+  return {
+    el: img,
+    x, y,
+    dx: (Math.random() - 0.5) * 6,
+    dy: (Math.random() - 0.5) * 6,
+    rotation: Math.random() * 360,
+    spin: (Math.random() - 0.5) * 2
+  };
+}
+
+// Create memes
+for (let i = 0; i < 8; i++) {
+  memes.push(createMeme());
+}
+
+// Animate memes inside viewport
+function animateMemes() {
+  memes.forEach(m => {
+    m.x += m.dx;
+    m.y += m.dy;
+    m.rotation += m.spin * 0.5;
+
+    if (m.x <= 0 || m.x >= window.innerWidth - m.el.offsetWidth) m.dx *= -1;
+    if (m.y <= 0 || m.y >= window.innerHeight - m.el.offsetHeight) m.dy *= -1;
+
+    m.x = Math.max(0, Math.min(m.x, window.innerWidth - m.el.offsetWidth));
+    m.y = Math.max(0, Math.min(m.y, window.innerHeight - m.el.offsetHeight));
+
+    m.el.style.transform = `translate(${m.x}px, ${m.y}px) rotate(${m.rotation}deg)`;
+  });
+
+  requestAnimationFrame(animateMemes);
+}
+
+animateMemes();
 </script>
 
 </body>
