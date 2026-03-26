@@ -149,8 +149,10 @@ function createMeme() {
   const img = document.createElement("img");
   img.src = memeImages[Math.floor(Math.random() * memeImages.length)];
   img.style.position = "fixed";
-  img.style.width = "100px";
-  img.style.height = "100px";
+  img.style.top = "0";
+  img.style.left = "0";
+  img.style.width = "150px";
+  img.style.height = "150px";
   img.style.pointerEvents = "none";
   img.style.zIndex = "0";
   img.style.willChange = "transform";
