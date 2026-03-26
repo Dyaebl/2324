@@ -186,7 +186,7 @@ animateElements();
 function sayYes() {
   card.classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
-  noBtn.remove();
+  noBtn.classList.add("hidden");
   elements.forEach(m => {
     m.el.src = newMemeImages[Math.floor(Math.random() * newMemeImages.length)];
     m.el.style.zIndex = "100"; // bring to front
