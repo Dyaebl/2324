@@ -51,7 +51,7 @@
 
   #noBtn {
     background: #ccc;
-    position: absolute;
+    position: fixed;
     transition: left 0.2s ease, top 0.2s ease;
   }
 
@@ -79,12 +79,13 @@
 </head>
 
 <body>
-<div id="noArea"></div> <!-- invisible area for No button -->
 <div class="card" id="card">
   <h1>Will you be my girlfriend? ❤️</h1>
-  <button id="yesBtn" onclick="sayYes()">Yes 😈</button>
-  <button id="noBtn">No 😇</button>
+  <button id="yesBtn" onclick="sayYes()">Yes 😈</button> 
 </div>
+  
+<button id="noBtn">No 😇</button>
+<div id="noArea"></div> <!-- invisible bigger area for movement -->
 
 <div class="result hidden" id="result">
   🎉 I knew you would pick Yes 😈 🎉
@@ -105,10 +106,10 @@
 
   if (distance < 120) {
     const areaRect = noArea.getBoundingClientRect();
-    const minX = areaRect.left;
-    const maxX = areaRect.right - noBtn.offsetWidth;
-    const minY = areaRect.top;
-    const maxY = areaRect.bottom - noBtn.offsetHeight;
+    const minX = areaRect.left + noBtn.offsetWidth / 2;
+    const maxX = areaRect.right - noBtn.offsetWidth / 2;
+    const minY = areaRect.top + noBtn.offsetHeight / 2;
+    const maxY = areaRect.bottom - noBtn.offsetHeight / 2;
 
     const newX = Math.random() * (maxX - minX) + minX;
     const newY = Math.random() * (maxY - minY) + minY;
