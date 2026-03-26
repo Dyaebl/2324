@@ -51,9 +51,8 @@
 
   #noBtn {
     background: #ccc;
-    position: fixed;
+    position: absolute;
     transition: left 0.2s ease, top 0.2s ease;
-    transform: translateX(100px);
   }
 
   .hidden {
@@ -80,24 +79,21 @@
 </head>
 
 <body>
+<div id="noArea"></div> <!-- invisible area for No button -->
 <div class="card" id="card">
   <h1>Will you be my girlfriend? ❤️</h1>
-  <button id="yesBtn" onclick="sayYes()">Yes 😈</button> 
+  <button id="yesBtn" onclick="sayYes()">Yes 😈</button>
+  <button id="noBtn">No 😇</button>
 </div>
-  
-<button id="noBtn">No 😇</button>
-<div id="noArea"></div> <!-- invisible bigger area for movement -->
 
 <div class="result hidden" id="result">
   🎉 I knew you would pick Yes 😈 🎉
 </div>
 
 <script>
-  const card = document.getElementById("card");
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
-  const noArea = document.getElementById("noArea");
-  
+
   let scale = 1;
 
   document.addEventListener("mousemove", (e) => {
@@ -107,11 +103,12 @@
   const distance = Math.sqrt(dx*dx + dy*dy);
 
   if (distance < 120) {
-    const areaRect = noArea.getBoundingClientRect();
-    const minX = areaRect.left + noBtn.offsetWidth / 2;
-    const maxX = areaRect.right - noBtn.offsetWidth / 2;
-    const minY = areaRect.top + noBtn.offsetHeight / 2;
-    const maxY = areaRect.bottom - noBtn.offsetHeight / 2;
+    const cardRect = card.getBoundingClientRect();
+    
+    const minX = noBtn.offsetWidth/2;
+    const maxX = cardRect.width - noBtn.offsetWidth/2;
+    const minY = noBtn.offsetHeight/2;
+    const maxY = cardRect.height - noBtn.offsetHeight/2;
 
     const newX = Math.random() * (maxX - minX) + minX;
     const newY = Math.random() * (maxY - minY) + minY;
@@ -129,11 +126,6 @@
     document.getElementById("card").classList.add("hidden");
     document.getElementById("result").classList.remove("hidden");
     launchConfetti();
-    
-    elements.forEach(m => {
-    m.el.src = newMemeImages[Math.floor(Math.random() * newMemeImages.length)];
-    m.el.style.zIndex = "100";
-    });
     
     // Replace memes with hearts
     elements.forEach(m => {
@@ -186,16 +178,11 @@ const memeImages = [
   "https://cdn.discordapp.com/attachments/1420717886904991789/1486667268099281017/image.png?ex=69c65649&is=69c504c9&hm=24bc090f9cb76d0d0baec64d485c3f1e8fda85fbef13f344efcdc36b958c44ef&",
   "https://media.discordapp.net/attachments/1420717886904991789/1486669969835032666/i-love-you.png?ex=69c658cd&is=69c5074d&hm=dbebb6f2e5d4974665dda9fb9feb9263569abf519743e830243fafb27b7b8d2b&=&format=webp&quality=lossless"
 ];
+const memes = [];
 
-const newMemeImages = [
-  "https://cdn.discordapp.com/attachments/1420717886904991789/1486707078201344010/cat-evil-laugh.png?ex=69c67b5d&is=69c529dd&hm=360c676410bc6ce5d58d33bf1840fac7d0f28830ce25c9e0923a46eee7ef84c1&"
-];
-
-let elements = [];
-
-function createMeme(imageArray) {
+function createMeme() {
   const img = document.createElement("img");
-  img.src = imageArray[Math.floor(Math.random() * imageArray.length)];
+  img.src = memeImages[Math.floor(Math.random() * memeImages.length)];
   img.style.position = "fixed";
   img.style.top = "0";
   img.style.left = "0";
@@ -210,23 +197,23 @@ function createMeme(imageArray) {
   img.style.transform = `translate(${x}px, ${y}px)`;
   document.body.appendChild(img);
 
-  elements.push({
+  return {
     el: img,
     x, y,
     dx: (Math.random() - 0.5) * 6,
     dy: (Math.random() - 0.5) * 6,
     rotation: Math.random() * 360,
     spin: (Math.random() - 0.5) * 2
-  });
+  };
 }
 
 // Create memes
 for (let i = 0; i < 8; i++) {
-  memes.push(createMeme(memeImages));
+  memes.push(createMeme());
 }
 
 // Animate memes inside viewport
-function animateElements() {
+function animateMemes() {
   memes.forEach(m => {
     m.x += m.dx;
     m.y += m.dy;
