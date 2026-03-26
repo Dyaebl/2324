@@ -62,6 +62,11 @@
     color: white;
     text-align: center;
   }
+  
+  .card {
+  position: relative;
+  z-index: 10;
+}
 </style>
 </head>
 
@@ -137,6 +142,73 @@
       setTimeout(() => confetti.remove(), 4000);
     }
   }
+  
+  const memeImages = [
+  "https://imgur.com/gallery/i7G5K78#/t/catmemes"
+]; 
+
+const memes = [];
+
+function createMeme() {
+  const img = document.createElement("img");
+  img.src = memeImages[Math.floor(Math.random() * memeImages.length)];
+
+  img.style.position = "fixed";
+  img.style.width = "70px";
+  img.style.height = "70px";
+  img.style.pointerEvents = "none";
+  img.style.zIndex = "0";
+  img.style.willChange = "transform";
+
+  document.body.appendChild(img);
+
+  return {
+    el: img,
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    dx: (Math.random() - 0.5) * 6,
+    dy: (Math.random() - 0.5) * 6,
+    rotation: Math.random() * 360,
+    spin: (Math.random() - 0.5) * 10
+  };
+}
+
+// create memes
+for (let i = 0; i < 8; i++) {
+  memes.push(createMeme());
+}
+
+function animateMemes() {
+  memes.forEach(m => {
+    // update position
+    m.x += m.dx;
+    m.y += m.dy;
+
+    // rotation
+    m.rotation += m.spin;
+
+    // wall collision (bounce)
+    if (m.x <= 0 || m.x >= window.innerWidth - 70) {
+      m.dx *= -1;
+      m.x = Math.max(0, Math.min(m.x, window.innerWidth - 70));
+    }
+
+    if (m.y <= 0 || m.y >= window.innerHeight - 70) {
+      m.dy *= -1;
+      m.y = Math.max(0, Math.min(m.y, window.innerHeight - 70));
+    }
+
+    // apply transform (smooth GPU rendering)
+    m.el.style.transform = `
+      translate(${m.x}px, ${m.y}px)
+      rotate(${m.rotation}deg)
+    `;
+  });
+
+  requestAnimationFrame(animateMemes);
+}
+
+animateMemes();
 </script>
 
 </body>
