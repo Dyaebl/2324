@@ -100,11 +100,14 @@
     const distance = Math.sqrt(dx*dx + dy*dy);
 
     if (distance < 120) {
-      const newX = Math.random() * (window.innerWidth - 100);
-      const newY = Math.random() * (window.innerHeight - 50);
+      const maxX = window.innerWidth - noBtn.offsetWidth;
+      const maxY = window.innerHeight - noBtn.offsetHeight;
 
-      noBtn.style.left = newX + "px";
-      noBtn.style.top = newY + "px";
+      const newX = Math.random() * maxX;
+      const newY = Math.random() * maxY;
+
+    noBtn.style.left = newX + "px";
+    noBtn.style.top = newY + "px";
 
       // Grow YES button each escape
       scale += 0.1;
