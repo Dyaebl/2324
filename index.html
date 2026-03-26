@@ -155,12 +155,19 @@ function createMeme() {
   img.src = memeImages[Math.floor(Math.random() * memeImages.length)];
 
   img.style.position = "fixed";
+  img.style.top = "0";
+  img.style.left = "0";
   img.style.width = "200px";
   img.style.height = "200px";
   img.style.pointerEvents = "none";
   img.style.zIndex = "0";
   img.style.willChange = "transform";
 
+  const x = Math.random() * (window.innerWidth - 200);
+  const y = Math.random() * (window.innerHeight - 200);
+
+  img.style.transform = `translate(${x}px, ${y}px)`;
+  
   document.body.appendChild(img);
 
   return {
@@ -170,7 +177,7 @@ function createMeme() {
     dx: (Math.random() - 0.5) * 6,
     dy: (Math.random() - 0.5) * 6,
     rotation: Math.random() * 360,
-    spin: (Math.random() - 0.5) * 10
+    spin: (Math.random() - 0.5) * 2
   };
 }
 
