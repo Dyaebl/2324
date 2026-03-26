@@ -46,11 +46,12 @@
     background: #ff99ff;
     color: white;
     position: relative;
+    transform: translateX(-100px);
   }
 
   #noBtn {
-    position: fixed; /* escape the card, stay in viewport */
-    left: 70%;
+    position: fixed; 
+    left: 60%;
     top: 60%;
     transform: translate(-50%, -50%);
     background: #ccc;
@@ -65,10 +66,16 @@
   .hidden { display: none; }
 
   .result {
-    font-size: 28px;
-    color: white;
-    text-align: center;
-  }
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+  color: white;
+  text-align: center;
+  z-index: 15;
+}
+  
 </style>
 </head>
 <body>
