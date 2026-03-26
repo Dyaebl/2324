@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Important Question</title>
-
 <style>
   body {
     margin: 0;
@@ -22,6 +21,10 @@
     border-radius: 20px;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 10;
+    width: 400px;
+    height: 300px;
   }
 
   h1 {
@@ -29,28 +32,28 @@
   }
 
   button {
-    
     padding: 12px 25px;
     font-size: 18px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     transition: 0.3s;
+    position: absolute;
   }
 
   #yesBtn {
     background: #ff99ff;
     color: white;
-    transform: translateX(-100px);
-  }
-
-  #yesBtn:hover {
-    transform: translateX(-100px) scale(1.1); 
+    left: 30%;
+    top: 60%;
+    transform: translate(-50%, -50%) scale(1);
   }
 
   #noBtn {
     background: #ccc;
-    position: absolute; 
+    left: 70%;
+    top: 60%;
+    transform: translate(-50%, -50%);
     transition: left 0.2s ease, top 0.2s ease;
   }
 
@@ -63,14 +66,8 @@
     color: white;
     text-align: center;
   }
-  
-  .card {
-  position: relative;
-  z-index: 10;
-}
 </style>
 </head>
-
 <body>
 
 <div class="card" id="card">
@@ -84,100 +81,90 @@
 </div>
 
 <script>
-  const noBtn = document.getElementById("noBtn");
-  const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+let scale = 1;
 
-  let scale = 1;
+// Move No button and grow Yes button
+document.addEventListener("mousemove", (e) => {
+  const rect = noBtn.getBoundingClientRect();
+  const dx = e.clientX - (rect.left + rect.width/2);
+  const dy = e.clientY - (rect.top + rect.height/2);
+  const distance = Math.sqrt(dx*dx + dy*dy);
 
-  document.addEventListener("mousemove", (e) => {
-    const rect = noBtn.getBoundingClientRect();
+  if (distance < 120) {
+    // Clamp inside viewport
+    const maxX = window.innerWidth - noBtn.offsetWidth/2;
+    const maxY = window.innerHeight - noBtn.offsetHeight/2;
+    const minX = noBtn.offsetWidth/2;
+    const minY = noBtn.offsetHeight/2;
 
-    const dx = e.clientX - rect.left;
-    const dy = e.clientY - rect.top;
-
-    const distance = Math.sqrt(dx*dx + dy*dy);
-
-    if (distance < 120) {
-      const maxX = window.innerWidth - noBtn.offsetWidth;
-      const maxY = window.innerHeight - noBtn.offsetHeight;
-
-      const newX = Math.random() * maxX;
-      const newY = Math.random() * maxY;
+    const newX = Math.random() * (maxX - minX) + minX;
+    const newY = Math.random() * (maxY - minY) + minY;
 
     noBtn.style.left = newX + "px";
     noBtn.style.top = newY + "px";
 
-      // Grow YES button each escape
-      scale += 0.1;
-      yesBtn.style.transform = `scale(${scale})`;
-    }
-  });
-
-  function sayYes() {
-    document.getElementById("card").classList.add("hidden");
-    document.getElementById("result").classList.remove("hidden");
-    launchConfetti();
+    // Grow Yes button while keeping shape
+    scale += 0.1;
+    yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
   }
+});
 
-  // 🎉 Simple Confetti
-  function launchConfetti() {
-    for (let i = 0; i < 100; i++) {
-      let confetti = document.createElement("div");
-      confetti.style.position = "fixed";
-      confetti.style.width = "10px";
-      confetti.style.height = "10px";
-      confetti.style.background = `hsl(${Math.random()*360}, 100%, 50%)`;
-      confetti.style.left = Math.random() * window.innerWidth + "px";
-      confetti.style.top = "-10px";
-      confetti.style.opacity = 0.7;
+function sayYes() {
+  document.getElementById("card").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+  launchConfetti();
+}
 
-      document.body.appendChild(confetti);
+// Simple Confetti
+function launchConfetti() {
+  for (let i = 0; i < 100; i++) {
+    const confetti = document.createElement("div");
+    confetti.style.position = "fixed";
+    confetti.style.width = "10px";
+    confetti.style.height = "10px";
+    confetti.style.background = `hsl(${Math.random()*360}, 100%, 50%)`;
+    confetti.style.left = Math.random() * window.innerWidth + "px";
+    confetti.style.top = "-10px";
+    confetti.style.opacity = 0.7;
+    document.body.appendChild(confetti);
 
-      let fall = Math.random() * 3 + 2;
-
-      confetti.animate([
-        { transform: "translateY(0px)" },
-        { transform: `translateY(${window.innerHeight}px)` }
-      ], {
-        duration: fall * 1000,
-        easing: "linear"
-      });
-
-      setTimeout(() => confetti.remove(), 4000);
-    }
+    const fall = Math.random() * 3 + 2;
+    confetti.animate([{ transform: "translateY(0px)" }, { transform: `translateY(${window.innerHeight}px)` }], {
+      duration: fall * 1000,
+      easing: "linear"
+    });
+    setTimeout(() => confetti.remove(), 4000);
   }
-  
-  const memeImages = [
-  "https://media.discordapp.net/attachments/1420717886904991789/1486667268099281017/image.png?ex=69c65649&is=69c504c9&hm=24bc090f9cb76d0d0baec64d485c3f1e8fda85fbef13f344efcdc36b958c44ef&=&format=webp&quality=lossless&width=883&height=897",
-  "https://media.discordapp.net/attachments/1420717886904991789/1486669969835032666/i-love-you.png?ex=69c658cd&is=69c5074d&hm=dbebb6f2e5d4974665dda9fb9feb9263569abf519743e830243fafb27b7b8d2b&=&format=webp&quality=lossless"
-]; 
+}
 
+// Memes
+const memeImages = [
+  "https://media.discordapp.net/attachments/1420717886904991789/1486667268099281017/image.png",
+  "https://media.discordapp.net/attachments/1420717886904991789/1486669969835032666/i-love-you.png"
+];
 const memes = [];
 
 function createMeme() {
   const img = document.createElement("img");
   img.src = memeImages[Math.floor(Math.random() * memeImages.length)];
-
   img.style.position = "fixed";
-  img.style.top = "0";
-  img.style.left = "0";
-  img.style.width = "200px";
-  img.style.height = "200px";
+  img.style.width = "100px";
+  img.style.height = "100px";
   img.style.pointerEvents = "none";
   img.style.zIndex = "0";
   img.style.willChange = "transform";
 
-  const x = Math.random() * (window.innerWidth - 200);
-  const y = Math.random() * (window.innerHeight - 200);
-
+  // Random position inside viewport
+  const x = Math.random() * (window.innerWidth - 100);
+  const y = Math.random() * (window.innerHeight - 100);
   img.style.transform = `translate(${x}px, ${y}px)`;
-  
   document.body.appendChild(img);
 
   return {
     el: img,
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
+    x, y,
     dx: (Math.random() - 0.5) * 6,
     dy: (Math.random() - 0.5) * 6,
     rotation: Math.random() * 360,
@@ -190,31 +177,24 @@ for (let i = 0; i < 8; i++) {
   memes.push(createMeme());
 }
 
+// Animate memes inside screen
 function animateMemes() {
   memes.forEach(m => {
-    // update position
     m.x += m.dx;
     m.y += m.dy;
-
-    // rotation
     m.rotation += m.spin * 0.5;
 
-    // wall collision (bounce)
-    if (m.x <= 0 || m.x >= window.innerWidth - 70) {
+    // Bounce inside screen
+    if (m.x <= 0 || m.x >= window.innerWidth - m.el.offsetWidth) {
       m.dx *= -1;
-      m.x = Math.max(0, Math.min(m.x, window.innerWidth - 70));
+      m.x = Math.max(0, Math.min(m.x, window.innerWidth - m.el.offsetWidth));
     }
-
-    if (m.y <= 0 || m.y >= window.innerHeight - 70) {
+    if (m.y <= 0 || m.y >= window.innerHeight - m.el.offsetHeight) {
       m.dy *= -1;
-      m.y = Math.max(0, Math.min(m.y, window.innerHeight - 70));
+      m.y = Math.max(0, Math.min(m.y, window.innerHeight - m.el.offsetHeight));
     }
 
-    // apply transform (smooth GPU rendering)
-    m.el.style.transform = `
-      translate(${m.x}px, ${m.y}px)
-      rotate(${m.rotation}deg)
-    `;
+    m.el.style.transform = `translate(${m.x}px, ${m.y}px) rotate(${m.rotation}deg)`;
   });
 
   requestAnimationFrame(animateMemes);
