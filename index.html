@@ -53,6 +53,7 @@
     background: #ccc;
     position: fixed;
     transition: left 0.2s ease, top 0.2s ease;
+    transform: translateX(100px);
   }
 
   .hidden {
@@ -92,6 +93,7 @@
 </div>
 
 <script>
+  const card = document.getElementById("card");
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
   const noArea = document.getElementById("noArea");
@@ -127,6 +129,11 @@
     document.getElementById("card").classList.add("hidden");
     document.getElementById("result").classList.remove("hidden");
     launchConfetti();
+    
+    elements.forEach(m => {
+    m.el.src = newMemeImages[Math.floor(Math.random() * newMemeImages.length)];
+    m.el.style.zIndex = "100";
+    });
     
     // Replace memes with hearts
     elements.forEach(m => {
@@ -179,11 +186,16 @@ const memeImages = [
   "https://cdn.discordapp.com/attachments/1420717886904991789/1486667268099281017/image.png?ex=69c65649&is=69c504c9&hm=24bc090f9cb76d0d0baec64d485c3f1e8fda85fbef13f344efcdc36b958c44ef&",
   "https://media.discordapp.net/attachments/1420717886904991789/1486669969835032666/i-love-you.png?ex=69c658cd&is=69c5074d&hm=dbebb6f2e5d4974665dda9fb9feb9263569abf519743e830243fafb27b7b8d2b&=&format=webp&quality=lossless"
 ];
-const memes = [];
 
-function createMeme() {
+const newMemeImages = [
+  "https://cdn.discordapp.com/attachments/1420717886904991789/1486707078201344010/cat-evil-laugh.png?ex=69c67b5d&is=69c529dd&hm=360c676410bc6ce5d58d33bf1840fac7d0f28830ce25c9e0923a46eee7ef84c1&"
+];
+
+let elements = [];
+
+function createMeme(imageArray) {
   const img = document.createElement("img");
-  img.src = memeImages[Math.floor(Math.random() * memeImages.length)];
+  img.src = imageArray[Math.floor(Math.random() * imageArray.length)];
   img.style.position = "fixed";
   img.style.top = "0";
   img.style.left = "0";
@@ -198,23 +210,23 @@ function createMeme() {
   img.style.transform = `translate(${x}px, ${y}px)`;
   document.body.appendChild(img);
 
-  return {
+  elements.push({
     el: img,
     x, y,
     dx: (Math.random() - 0.5) * 6,
     dy: (Math.random() - 0.5) * 6,
     rotation: Math.random() * 360,
     spin: (Math.random() - 0.5) * 2
-  };
+  });
 }
 
 // Create memes
 for (let i = 0; i < 8; i++) {
-  memes.push(createMeme());
+  memes.push(createMeme(memeImages));
 }
 
 // Animate memes inside viewport
-function animateMemes() {
+function animateElements() {
   memes.forEach(m => {
     m.x += m.dx;
     m.y += m.dy;
